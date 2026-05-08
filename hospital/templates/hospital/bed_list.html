@@ -1,0 +1,33 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Beds{% endblock %}
+
+{% block content %}
+<div class="list-container">
+    <h1><i class="fas fa-bed"></i> Beds</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Bed #</th>
+                <th>Room</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Patient</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bed in beds %}
+            <tr>
+                <td>{{ bed.bed_number }}</td>
+                <td>{{ bed.room }}</td>
+                <td>{{ bed.room.get_room_type_display }}</td>
+                <td><span class="badge badge-{{ bed.status }}">{{ bed.get_status_display }}</span></td>
+                <td>{% if bed.patient %}{{ bed.patient }}{% else %}-{% endif %}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">No beds found</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

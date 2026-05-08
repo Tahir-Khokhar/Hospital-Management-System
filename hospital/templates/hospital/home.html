@@ -1,0 +1,306 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Welcome - Hospital Management System{% endblock %}
+
+{% block content %}
+<style>
+/* Override guest layout for home page to show sidebar */
+body.layout-guest .main-content {
+    margin-left: 260px;
+    padding-top: 2rem;
+}
+
+body.layout-guest .guest-navbar {
+    display: none;
+}
+</style>
+
+<!-- Sidebar for authenticated users is in base.html -->
+{% if not user.is_authenticated %}
+<!-- Guest Sidebar -->
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <div class="hospital-logo">
+            <i class="fas fa-hospital-alt"></i>
+            <div class="logo-text">
+                <span class="logo-title">HMS</span>
+                <span class="logo-subtitle">Hospital Management</span>
+            </div>
+        </div>
+    </div>
+    <ul class="nav-links">
+        <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-users"></i> Patients</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-user-md"></i> Doctors</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-door-closed"></i> Rooms</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-bed"></i> Beds</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-procedures"></i> Operations</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-pills"></i> Treatments</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-vial"></i> Lab Tests</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-file-invoice-dollar"></i> Bills</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-chart-bar"></i> Reports</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li style="margin-top: 1rem; border-top: 1px solid #34495e; padding-top: 1rem;"><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+        <li><a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Register</a></li>
+    </ul>
+</nav>
+{% endif %}
+
+<div class="container">
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1><i class="fas fa-hospital-alt"></i> Hospital Management System</h1>
+            <p class="hero-tagline">Complete Healthcare Solution for Doctors, Patients &amp; Administrators</p>
+
+            <div class="hero-auth">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-doctor dropdown-toggle"><i class="fas fa-user-md"></i> Doctor Portal <i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt"></i> Doctor Login</a>
+                        <a href="{% url 'register' %}" class="dropdown-item"><i class="fas fa-user-plus"></i> Doctor Register</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-patient dropdown-toggle"><i class="fas fa-user-injured"></i> Patient Portal <i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt"></i> Patient Login</a>
+                        <a href="{% url 'register' %}" class="dropdown-item"><i class="fas fa-user-plus"></i> Patient Register</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-admin dropdown-toggle"><i class="fas fa-user-shield"></i> Admin Portal <i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt"></i> Admin Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title"><i class="fas fa-th-large"></i> Quick Actions</h2>
+        <div class="features-grid">
+            <a href="{% url 'add_patient' %}" class="feature-card feature-patient"><i class="fas fa-user-plus"></i><span>Add Patient</span><small>Register new patient</small></a>
+            <a href="{% url 'add_doctor' %}" class="feature-card feature-doctor"><i class="fas fa-user-md"></i><span>Add Doctor</span><small>Add medical staff</small></a>
+            <a href="{% url 'add_staff' %}" class="feature-card feature-staff"><i class="fas fa-users-cog"></i><span>Add Staff</span><small>Add nurse/ward boy</small></a>
+            <a href="{% url 'add_room' %}" class="feature-card feature-room"><i class="fas fa-door-open"></i><span>Add Room</span><small>Create new room</small></a>
+            <a href="{% url 'add_appointment' %}" class="feature-card feature-appointment"><i class="fas fa-calendar-plus"></i><span>Add Appointment</span><small>Schedule visit</small></a>
+            <a href="{% url 'add_operation' %}" class="feature-card feature-operation"><i class="fas fa-procedures"></i><span>Add Operation</span><small>Schedule surgery</small></a>
+            <a href="{% url 'bed_list' %}" class="feature-card feature-bed"><i class="fas fa-bed"></i><span>View Beds</span><small>Check availability</small></a>
+            <a href="{% url 'add_treatment' %}" class="feature-card feature-treatment"><i class="fas fa-pills"></i><span>Add Treatment</span><small>Prescribe care</small></a>
+            <a href="{% url 'add_lab_test' %}" class="feature-card feature-lab"><i class="fas fa-vial"></i><span>Add Lab Test</span><small>Order diagnostics</small></a>
+            <a href="{% url 'add_invoice' %}" class="feature-card feature-invoice"><i class="fas fa-file-invoice-dollar"></i><span>Add Invoice</span><small>Create billing</small></a>
+            <a href="{% url 'patient_list' %}" class="feature-card feature-list"><i class="fas fa-users"></i><span>View Patients</span><small>Browse records</small></a>
+            <a href="{% url 'reports' %}" class="feature-card feature-reports"><i class="fas fa-chart-pie"></i><span>Reports</span><small>Analytics &amp; insights</small></a>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title"><i class="fas fa-star"></i> New Features</h2>
+        <div class="features-grid">
+            <a href="{% url 'medical_record_list' %}" class="feature-card feature-medical"><i class="fas fa-file-medical-alt"></i><span>Medical Records</span><small>Patient history</small></a>
+            <a href="{% url 'allergy_list' %}" class="feature-card feature-allergy"><i class="fas fa-allergies"></i><span>Allergies</span><small>Track allergies</small></a>
+            <a href="{% url 'vital_sign_list' %}" class="feature-card feature-vitals"><i class="fas fa-heartbeat"></i><span>Vital Signs</span><small>BP, pulse, temp</small></a>
+            <a href="{% url 'prescription_list' %}" class="feature-card feature-prescription"><i class="fas fa-prescription"></i><span>Prescriptions</span><small>Manage RX</small></a>
+            <a href="{% url 'medicine_list' %}" class="feature-card feature-medicine"><i class="fas fa-pills"></i><span>Pharmacy</span><small>Medicine inventory</small></a>
+            <a href="{% url 'ambulance_list' %}" class="feature-card feature-ambulance"><i class="fas fa-ambulance"></i><span>Ambulances</span><small>Emergency transport</small></a>
+            <a href="{% url 'emergency_admission_list' %}" class="feature-card feature-emergency"><i class="fas fa-exclamation-triangle"></i><span>Emergency</span><small>Emergency admissions</small></a>
+            <a href="{% url 'insurance_provider_list' %}" class="feature-card feature-insurance"><i class="fas fa-shield-alt"></i><span>Insurance</span><small>Providers & claims</small></a>
+            <a href="{% url 'payment_plan_list' %}" class="feature-card feature-payment"><i class="fas fa-credit-card"></i><span>Payment Plans</span><small>Installment plans</small></a>
+        </div>
+    </section>
+
+    <div class="dashboard" id="hospitalDashboard">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1><i class="fas fa-hospital"></i> Hospital Dashboard</h1>
+                <span class="dashboard-date"><i class="far fa-calendar-alt"></i> {% now "F j, Y" %}</span>
+            </div>
+            <div class="dashboard-badge"><span class="live-indicator"><i class="fas fa-circle"></i> Live Data</span></div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card doctors"><div class="stat-icon"><i class="fas fa-user-md"></i></div><div class="stat-info"><h3>{{ total_doctors }}</h3><p>Doctors</p></div></div>
+            <div class="stat-card patients"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-info"><h3>{{ total_patients }}</h3><p>Patients</p></div></div>
+            <div class="stat-card staff"><div class="stat-icon"><i class="fas fa-users-cog"></i></div><div class="stat-info"><h3>{{ total_staff }}</h3><p>Staff Members</p></div></div>
+            <div class="stat-card appointments"><div class="stat-icon"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><h3>{{ total_appointments }}</h3><p>Appointments</p></div></div>
+            <div class="stat-card rooms"><div class="stat-icon"><i class="fas fa-door-closed"></i></div><div class="stat-info"><h3>{{ total_rooms }}</h3><p>Total Rooms</p></div></div>
+            <div class="stat-card beds"><div class="stat-icon"><i class="fas fa-bed"></i></div><div class="stat-info"><h3>{{ available_beds }}{% if total_beds %} / {{ total_beds }}{% endif %}</h3><p>Available Beds</p></div></div>
+            <div class="stat-card operations"><div class="stat-icon"><i class="fas fa-procedures"></i></div><div class="stat-info"><h3>{{ total_operations }}</h3><p>Operations</p></div></div>
+            <div class="stat-card treatments"><div class="stat-icon"><i class="fas fa-pills"></i></div><div class="stat-info"><h3>{{ total_treatments }}</h3><p>Treatments</p></div></div>
+            <div class="stat-card lab-tests"><div class="stat-icon"><i class="fas fa-vial"></i></div><div class="stat-info"><h3>{{ total_lab_tests }}</h3><p>Lab Tests</p></div></div>
+            <div class="stat-card invoices"><div class="stat-icon"><i class="fas fa-file-invoice-dollar"></i></div><div class="stat-info"><h3>{{ total_invoices }}</h3><p>Invoices</p></div></div>
+            <div class="stat-card revenue"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div class="stat-info"><h3>{{ total_revenue|floatformat:0 }}</h3><p>Total Revenue (paid)</p></div></div>
+            <div class="stat-card pending"><div class="stat-icon"><i class="fas fa-clock"></i></div><div class="stat-info"><h3>{{ pending_invoices }}</h3><p>Pending Bills</p></div></div>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="today-section">
+            <div class="section-header"><h2><i class="fas fa-calendar-day"></i> Today's Overview</h2><span class="section-subtitle">Scheduled for today</span></div>
+            <div class="today-grid today-grid-dashboard">
+                <div class="today-card today-appointments"><div class="today-icon"><i class="fas fa-calendar-check"></i></div><div class="today-info"><h4>{{ today_appointments }}</h4><p>Appointments Today</p></div></div>
+                <div class="today-card today-operations"><div class="today-icon"><i class="fas fa-procedures"></i></div><div class="today-info"><h4>{{ today_operations }}</h4><p>Operations Today</p></div></div>
+                <div class="today-card today-pending"><div class="today-icon"><i class="fas fa-file-invoice-dollar"></i></div><div class="today-info"><h4>{{ pending_invoices }}</h4><p>Pending Invoices</p></div></div>
+                <div class="today-card today-beds"><div class="today-icon"><i class="fas fa-bed"></i></div><div class="today-info"><h4>{{ available_beds }}</h4><p>Beds Available</p></div></div>
+            </div>
+        </div>
+
+        {% if user.is_authenticated and notifications %}
+        <hr class="section-divider">
+        <div class="activity-section-dashboard">
+            <div class="section-header"><h2><i class="fas fa-bell"></i> Recent Notifications</h2></div>
+            <ul class="notification-preview-list">
+                {% for n in notifications %}
+                <li><a href="{% url 'notification_list' %}">{{ n.message|truncatewords:15 }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <hr class="section-divider">
+
+        <div class="charts-section-dashboard">
+            <div class="section-header"><h2><i class="fas fa-chart-pie"></i> Analytics &amp; Performance</h2><span class="section-subtitle">Monthly revenue &amp; appointment status</span></div>
+            <div class="charts-row">
+                <div class="chart-card"><div class="chart-header"><h3><i class="fas fa-chart-line"></i> Monthly Revenue</h3></div><div class="chart-body"><canvas id="revenueChart" width="400" height="200"></canvas></div></div>
+                <div class="chart-card"><div class="chart-header"><h3><i class="fas fa-chart-pie"></i> Appointment Status</h3></div><div class="chart-body"><canvas id="appointmentChart" width="400" height="200"></canvas></div></div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="activity-section-dashboard">
+            <div class="section-header"><h2><i class="fas fa-history"></i> Recent Appointments</h2><span class="section-subtitle">Latest scheduled visits</span></div>
+            <div class="activity-card">
+                <div class="activity-table-wrap">
+                    <table class="activity-table">
+                        <thead><tr><th><i class="fas fa-user"></i> Patient</th><th><i class="fas fa-user-md"></i> Doctor</th><th><i class="far fa-calendar"></i> Date</th><th><i class="fas fa-info-circle"></i> Status</th></tr></thead>
+                        <tbody>
+                            {% for appt in recent_appointments %}
+                            <tr>
+                                <td><span class="patient-name">{{ appt.patient.first_name }} {{ appt.patient.last_name }}</span></td>
+                                <td><span class="doctor-name">Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}</span></td>
+                                <td>{{ appt.date }}</td>
+                                <td><span class="status-badge status-{{ appt.status|lower }}">{{ appt.get_status_display }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" style="text-align:center;padding:1.5rem;">No appointments yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="guest-info">
+        <h2 class="section-title"><i class="fas fa-star"></i> Why Choose Us</h2>
+        <div class="info-grid">
+            <div class="info-card"><i class="fas fa-shield-alt fa-2x"></i><h3>Secure &amp; Reliable</h3><p>Structured patient data management</p></div>
+            <div class="info-card"><i class="fas fa-bolt fa-2x"></i><h3>Fast &amp; Efficient</h3><p>Streamlined workflows &amp; billing</p></div>
+            <div class="info-card"><i class="fas fa-chart-line fa-2x"></i><h3>Analytics &amp; Reports</h3><p>Real-time dashboards</p></div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    const chartUrl = "{% url 'chart_data' %}";
+
+    function initDropdowns() {
+        document.querySelectorAll('.dropdown-toggle').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const dropdown = this.parentElement;
+                const isOpen = dropdown.classList.contains('open');
+                document.querySelectorAll('.dropdown').forEach(function(d) { d.classList.remove('open'); });
+                if (!isOpen) dropdown.classList.add('open');
+            });
+        });
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown').forEach(function(d) { d.classList.remove('open'); });
+        });
+    }
+
+    function buildAppointmentChart(ctx, rows) {
+        const labels = [];
+        const data = [];
+        const colors = ['#27ae60', '#3498db', '#e67e22', '#9b59b6', '#e74c3c', '#1abc9c'];
+        if (rows && rows.length) {
+            rows.forEach(function(row, i) {
+                labels.push(row.status || 'Unknown');
+                data.push(row.count);
+            });
+        }
+        if (!data.length || data.every(function(v) { return !v; })) {
+            labels.push('No data', '—');
+            data.push(1, 0);
+        }
+        return new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: labels.map(function(_, i) { return colors[i % colors.length]; }),
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+    }
+
+    function buildRevenueChart(ctx, months, revenue) {
+        const m = months && months.length ? months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        const r = revenue && revenue.length ? revenue : [0, 0, 0, 0, 0, 0];
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: m,
+                datasets: [{
+                    label: 'Revenue',
+                    data: r,
+                    borderColor: '#2c7da0',
+                    backgroundColor: 'rgba(44,125,160,0.08)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#1f6390',
+                    pointRadius: 5
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initDropdowns();
+
+        const revEl = document.getElementById('revenueChart');
+        const apptEl = document.getElementById('appointmentChart');
+        if (!revEl || !apptEl || typeof Chart === 'undefined') return;
+
+        const revCtx = revEl.getContext('2d');
+        const apptCtx = apptEl.getContext('2d');
+
+        fetch(chartUrl)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                buildRevenueChart(revCtx, data.months, data.revenue);
+                buildAppointmentChart(apptCtx, data.appointment_status);
+            })
+            .catch(function() {
+                buildRevenueChart(revCtx, null, null);
+                buildAppointmentChart(apptCtx, null);
+            });
+    });
+})();
+</script>
+{% endblock %}

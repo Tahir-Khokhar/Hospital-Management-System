@@ -1,0 +1,75 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}{{ patient }} - Patient Profile{% endblock %}
+
+{% block content %}
+<div class="profile-header">
+    <h1>Patient Profile</h1>
+    <a href="{% url 'patient_list' %}" class="btn">Back to Patients</a>
+</div>
+
+<div class="profile-grid">
+    <div class="profile-card">
+        <h2>Personal Information</h2>
+        <div class="profile-field">
+            <label>Full Name:</label>
+            <span>{{ patient.first_name }} {{ patient.last_name }}</span>
+        </div>
+        <div class="profile-field">
+            <label>Age:</label>
+            <span>{{ patient.age }} years</span>
+        </div>
+        <div class="profile-field">
+            <label>Gender:</label>
+            <span>{{ patient.gender }}</span>
+        </div>
+        <div class="profile-field">
+            <label>Phone:</label>
+            <span>{{ patient.phone }}</span>
+        </div>
+        <div class="profile-field">
+            <label>Address:</label>
+            <span>{{ patient.address }}</span>
+        </div>
+        <div class="profile-field">
+            <label>Admitted Date:</label>
+            <span>{{ patient.admitted_date }}</span>
+        </div>
+    </div>
+
+    <div class="profile-card">
+        <h2>Medical History</h2>
+        <p>{{ patient.medical_history|default:"No medical history recorded." }}</p>
+    </div>
+
+    <div class="profile-card full-width">
+        <h2>Appointment History</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Doctor</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.time }}</td>
+                    <td>{{ appointment.doctor }}</td>
+                    <td><span class="badge badge-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+                    <td>{{ appointment.notes|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No appointments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

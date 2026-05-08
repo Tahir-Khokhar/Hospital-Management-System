@@ -1,0 +1,35 @@
+{% extends 'hospital/base.html' %}
+{% block title %}Patient Map{% endblock %}
+{% block content %}
+<div class="map-container">
+    <h1><i class="fas fa-map-marker-alt"></i> Patient Locations</h1>
+    <div id="map" style="height: 500px; width: 100%; border-radius: 10px;"></div>
+
+<script>
+function initMap() {
+    const map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: { lat: 0, lng: 0 }
+    });
+    
+    const patients = [
+        {% for p in patients %}
+        { lat: {{ p.latitude }}, lng: {{ p.longitude }}, name: "{{ p }}" },
+        {% endfor %}
+    ];
+    
+    if (patients.length > 0) {
+        map.setCenter({ lat: patients[0].lat, lng: patients[0].lng });
+    }
+    
+    patients.forEach(p => {
+        new google.maps.Marker({
+            position: { lat: p.lat, lng: p.lng },
+            map: map,
+            title: p.name
+        });
+    });
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+{% endblock %}
