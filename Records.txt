@@ -1,0 +1,80 @@
+=== ADMIN ===
+Username: admin | Password: admin123
+
+=== DOCTORS (20 users) ===
+Username: doctor0 | Password: doctor123 | Role: doctor
+Username: doctor1 | Password: doctor123 | Role: doctor
+Username: doctor10 | Password: doctor123 | Role: doctor
+Username: doctor11 | Password: doctor123 | Role: doctor
+Username: doctor12 | Password: doctor123 | Role: doctor
+Username: doctor13 | Password: doctor123 | Role: doctor
+Username: doctor14 | Password: doctor123 | Role: doctor
+Username: doctor15 | Password: doctor123 | Role: doctor
+Username: doctor16 | Password: doctor123 | Role: doctor
+Username: doctor17 | Password: doctor123 | Role: doctor
+Username: doctor18 | Password: doctor123 | Role: doctor
+Username: doctor19 | Password: doctor123 | Role: doctor
+Username: doctor2 | Password: doctor123 | Role: doctor
+Username: doctor3 | Password: doctor123 | Role: doctor
+Username: doctor4 | Password: doctor123 | Role: doctor
+Username: doctor5 | Password: doctor123 | Role: doctor
+Username: doctor6 | Password: doctor123 | Role: doctor
+Username: doctor7 | Password: doctor123 | Role: doctor
+Username: doctor8 | Password: doctor123 | Role: doctor
+Username: doctor9 | Password: doctor123 | Role: doctor
+
+=== PATIENTS (25 users) ===
+Username: patient0 | Password: patient123 | Role: patient
+Username: patient11 | Password: patient123 | Role: patient
+Username: patient14 | Password: patient123 | Role: patient
+Username: patient17 | Password: patient123 | Role: patient
+Username: patient2 | Password: patient123 | Role: patient
+Username: patient22 | Password: patient123 | Role: patient
+Username: patient25 | Password: patient123 | Role: patient
+Username: patient29 | Password: patient123 | Role: patient
+Username: patient3 | Password: patient123 | Role: patient
+Username: patient30 | Password: patient123 | Role: patient
+Username: patient33 | Password: patient123 | Role: patient
+Username: patient34 | Password: patient123 | Role: patient
+Username: patient35 | Password: patient123 | Role: patient
+Username: patient37 | Password: patient123 | Role: patient
+Username: patient39 | Password: patient123 | Role: patient
+Username: patient40 | Password: patient123 | Role: patient
+Username: patient41 | Password: patient123 | Role: patient
+Username: patient43 | Password: patient123 | Role: patient
+Username: patient44 | Password: patient123 | Role: patient
+Username: patient9 | Password: patient123 | Role: patient
+
+=== DOCTOR PROFILES ===
+Dr. Margaret Brown (User: doctor0)
+Dr. Betty Jackson (User: doctor1)
+Dr. Margaret Martinez (User: doctor2)
+Dr. Matthew Jones (User: doctor3)
+Dr. Sarah Davis (User: doctor4)
+Dr. Robert Lee (User: doctor5)
+Dr. Mary Garcia (User: doctor6)
+Dr. Mark Robinson (User: doctor7)
+Dr. James Robinson (User: doctor8)
+Dr. James Davis (User: doctor9)
+Dr. Robert Brown (User: doctor10)
+Dr. Susan Perez (User: doctor11)
+Dr. Daniel Perez (User: doctor12)
+Dr. Thomas Miller (User: doctor13)
+Dr. Jessica Moore (User: doctor14)
+Dr. Daniel Thompson (User: doctor15)
+Dr. Linda Garcia (User: doctor16)
+Dr. Matthew Hernandez (User: doctor17)
+Dr. Anthony Hernandez (User: doctor18)
+Dr. Susan Rodriguez (User: doctor19)
+
+=== PATIENT PROFILES (first 10) ===
+Betty Robinson (User: patient0)
+Margaret Wilson (No user)
+Linda Ramirez (User: patient2)
+Daniel Brown (User: patient3)
+Jessica Jackson (No user)
+Mary Ramirez (No user)
+James Taylor (No user)
+Richard Martinez (No user)
+Matthew Clark (No user)
+Jennifer Perez (User: patient9)
