@@ -1,0 +1,70 @@
+{% extends "hospital/base.html" %}
+{% block title %}Audit Logs - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="list-container">
+    <div class="page-header">
+        <h1><i class="fas fa-history"></i> Audit Trail</h1>
+    </div>
+
+    <div class="search-bar">
+        <form method="get" class="search-form">
+            <input type="text" name="q" class="form-control" placeholder="Search user, action, model...">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    {% if audit_logs %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>Object</th>
+                <th>Details</th>
+                <th>IP/User Agent</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in audit_logs %}
+            <tr>
+                <td>{{ log.timestamp|date:"M d H:i:s"|timeuntil:"1 hour" == "0 minutes ago" as recent }}<br><small class="text-muted">{{ log.timestamp|date:"M d H:i" }}</small></td>
+                <td>
+                    {% if log.user.username %}
+                    <strong>{{ log.user.get_full_name|default:log.user.username }}</strong>
+                    {% else %}
+                    <span class="badge badge-dark">System</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if log.action == 'create' %}
+                    <span class="badge badge-success"><i class="fas fa-plus"></i> Created</span>
+                    {% elif log.action == 'update' %}
+                    <span class="badge badge-warning"><i class="fas fa-edit"></i> Updated</span>
+                    {% elif log.action == 'delete' %}
+                    <span class="badge badge-danger"><i class="fas fa-trash"></i> Deleted</span>
+                    {% elif log.action == 'login' %}
+                    <span class="badge badge-info"><i class="fas fa-sign-in-alt"></i> Login</span>
+                    {% else %}
+                    <span class="badge badge-secondary"><i class="fas fa-cog"></i> {{ log.action|title }}</span>
+                    {% endif %}
+                </td>
+                <td><code>{{ log.model_name }} #{{ log.object_id|default:"—" }}</code></td>
+                <td class="text-truncate">{{ log.description|truncatechars:60 }}</td>
+                <td><small class="text-muted d-block">{{ log.ip_address|default:"—" }}</small><small>{{ log.user_agent|truncatechars:30|default:"—" }}</small></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-row text-center py-5">
+        <i class="fas fa-history fa-3x text-muted mb-3"></i>
+        <h4>Audit log empty</h4>
+        <p class="text-muted">No system activity recorded yet.</p>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "hospital/base.html" %}
+{% block title %}Pharmacy / Medicines - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="list-container">
+    <div class="list-header">
+        <h1><i class="fas fa-pills"></i> Pharmacy Inventory</h1>
+        <a href="{% url 'add_medicine' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Medicine
+        </a>
+    </div>
+
+    <div class="search-bar">
+        <form method="get" class="search-form">
+            <input type="text" name="q" class="form-control" placeholder="Search medicines, category, manufacturer...">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    {% if medicines %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Mfg</th>
+                <th>Stock</th>
+                <th>Reorder</th>
+                <th>Price</th>
+                <th>Expiry</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for medicine in medicines %}
+            <tr class="{% if medicine.is_low_stock %}table-warning{% elif medicine.quantity_in_stock == 0 %}table-danger{% endif %}">
+                <td><strong>{{ medicine.name|title }}</strong></td>
+                <td>{{ medicine.category.name|default:"—" }}</td>
+                <td>{{ medicine.manufacturer|truncatechars:20|default:"—" }}</td>
+                <td>
+                    <strong class="{% if medicine.is_low_stock %}text-warning{% elif medicine.quantity_in_stock == 0 %}text-danger{% endif %}">
+                        {{ medicine.quantity_in_stock }} {{ medicine.unit|default:"units" }}
+                    </strong>
+                </td>
+                <td>{{ medicine.reorder_level }}</td>
+                <td>${{ medicine.selling_price_per_unit|floatformat:2 }}</td>
+                <td>
+                    {% if medicine.expiry_date %}
+                        {{ medicine.expiry_date|date:"M y" }}
+                        {% if medicine.expiry_date|timeuntil:"60" < "30 days" %}<i class="fas fa-exclamation-triangle text-warning ml-1"></i>{% endif %}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                <td>
+                    {% if medicine.quantity_in_stock == 0 %}
+                    <span class="badge badge-danger">Out of Stock</span>
+                    {% elif medicine.is_low_stock %}
+                    <span class="badge badge-warning">Low Stock</span>
+                    {% else %}
+                    <span class="badge badge-success">Available</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'medicine_detail' medicine.pk %}" class="btn btn-info" title="View"><i class="fas fa-eye"></i></a>
+                        <a href="{% url 'edit_medicine' medicine.pk %}" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                        {% if medicine.is_low_stock or medicine.quantity_in_stock == 0 %}
+                        <a href="{% url 'reorder_medicine' medicine.pk %}" class="btn btn-success" title="Reorder"><i class="fas fa-redo"></i></a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-row text-center py-5">
+        <i class="fas fa-pills fa-3x text-muted mb-3"></i>
+        <h4>Empty Pharmacy</h4>
+        <p class="text-muted">No medicines in inventory yet.</p>
+        <a href="{% url 'add_medicine' %}" class="btn btn-primary mt-3">Add First Medicine</a>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

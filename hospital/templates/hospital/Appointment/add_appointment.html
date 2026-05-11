@@ -1,0 +1,42 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Schedule Appointment - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Schedule Appointment</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Patient</label>
+            <select name="patient" class="form-control" required>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}">{{ patient }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Doctor</label>
+            <select name="doctor" class="form-control" required>
+                {% for doctor in doctors %}
+                <option value="{{ doctor.id }}">{{ doctor }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" name="date" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Time</label>
+            <input type="time" name="time" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Notes</label>
+            <textarea name="notes" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Schedule</button>
+        <a href="{% url 'appointment_list' %}" class="btn">Cancel</a>
+    </form>
+</div>
+{% endblock %}

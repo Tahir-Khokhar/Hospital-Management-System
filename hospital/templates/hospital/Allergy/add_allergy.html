@@ -1,0 +1,86 @@
+{% extends "hospital/base.html" %}
+{% block title %}Add Allergy - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="form-container">
+    <h1><i class="fas fa-allergies"></i> Add Patient Allergy</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Patient <span class="text-danger">*</span></label>
+            <select name="patient" class="form-control" required>
+                <option value="">Select Patient</option>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}">{{ patient.get_full_name|default:patient }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Allergen <span class="text-danger">*</span></label>
+            <input type="text" name="allergen" class="form-control" placeholder="e.g., Penicillin, Peanuts, Latex, Dust Mites" required>
+        </div>
+
+        <div class="form-group">
+            <label>Allergy Type <span class="text-danger">*</span></label>
+            <select name="allergy_type" class="form-control" required>
+                <option value="">Select Type</option>
+                <option value="drug">Drug/Medication</option>
+                <option value="food">Food</option>
+                <option value="environmental">Environmental</option>
+                <option value="contact">Contact (Skin)</option>
+                <option value="insect">Insect Sting</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Severity <span class="text-danger">*</span></label>
+            <select name="severity" class="form-control" required>
+                <option value="">Select Severity</option>
+                <option value="mild">Mild (Rash/Itch)</option>
+                <option value="moderate">Moderate (Swelling)</option>
+                <option value="severe">Severe (Breathing)</option>
+                <option value="life_threatening">Life Threatening (Anaphylaxis)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Symptoms/Reactions</label>
+            <textarea name="reactions" class="form-control" rows="4" placeholder="Rash, hives, swelling, difficulty breathing, anaphylaxis, nausea, etc..."></textarea>
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Discovered Date</label>
+                <input type="date" name="discovered_date" class="form-control" value="{{ today|date:'Y-m-d' }}" required>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label>Treatment Notes</label>
+            <textarea name="treatment_notes" class="form-control" rows="2" placeholder="Prescribed epinephrine? Avoid certain foods?"></textarea>
+        </div>
+
+        <div class="form-actions" style="text-align: right; margin-top: 2rem;">
+            <a href="{% url 'allergy_list' %}" class="btn btn-secondary mr-2">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Allergy Record
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}

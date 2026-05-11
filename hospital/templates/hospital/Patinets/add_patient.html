@@ -1,0 +1,46 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Add Patient - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Add Patient</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="first_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" name="last_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Age</label>
+            <input type="number" name="age" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Gender</label>
+            <select name="gender" class="form-control" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" name="phone" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <textarea name="address" class="form-control" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Medical History</label>
+            <textarea name="medical_history" class="form-control" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Patient</button>
+        <a href="{% url 'patient_list' %}" class="btn">Cancel</a>
+    </form>
+</div>
+{% endblock %}
