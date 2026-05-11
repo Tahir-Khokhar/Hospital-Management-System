@@ -1,0 +1,78 @@
+{% extends "hospital/base.html" %}
+{% block title %}Ambulances - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="list-container">
+    <div class="list-header">
+        <h1><i class="fas fa-ambulance"></i> Ambulance Fleet</h1>
+        <a href="{% url 'add_ambulance' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Ambulance
+        </a>
+    </div>
+
+    <div class="search-bar">
+        <form method="get" class="search-form">
+            <input type="text" name="q" class="form-control" placeholder="Search vehicle, driver, location...">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    {% if ambulances %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Vehicle #</th>
+                <th>Driver</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for amb in ambulances %}
+            <tr class="{% if amb.status == 'available' %}table-success{% elif amb.status == 'dispatched' %}table-warning{% elif amb.status == 'maintenance' %}table-info{% else %}table-secondary{% endif %}">
+                <td><strong class="text-primary">{{ amb.vehicle_number }}</strong></td>
+                <td>{{ amb.driver_name|title }}</td>
+                <td><a href="tel:{{ amb.driver_phone }}" class="text-info">{{ amb.driver_phone }}</a></td>
+                <td>{{ amb.current_location|default:"Hospital Base"|truncatechars:25 }}</td>
+                <td>
+                    {% if amb.status == 'available' %}
+                    <span class="badge badge-success"><i class="fas fa-check"></i> {{ amb.get_status_display }}</span>
+                    {% elif amb.status == 'dispatched' %}
+                    <span class="badge badge-warning"><i class="fas fa-truck"></i> {{ amb.get_status_display }}</span>
+                    {% elif amb.status == 'maintenance' %}
+                    <span class="badge badge-info"><i class="fas fa-tools"></i> {{ amb.get_status_display }}</span>
+                    {% elif amb.status == 'returning' %}
+                    <span class="badge badge-primary"><i class="fas fa-arrow-right"></i> {{ amb.get_status_display }}</span>
+                    {% else %}
+                    <span class="badge badge-danger"><i class="fas fa-times"></i> {{ amb.get_status_display }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ amb.updated_at|date:"M d H:i"|default:"—" }}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'ambulance_detail' amb.pk %}" class="btn btn-info" title="Details"><i class="fas fa-eye"></i></a>
+                        <a href="{% url 'edit_ambulance' amb.pk %}" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                        {% if amb.status == 'available' %}
+                        <a href="{% url 'dispatch_ambulance' amb.pk %}" class="btn btn-success" title="Dispatch"><i class="fas fa-play"></i></a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-row text-center py-5">
+        <i class="fas fa-ambulance fa-3x text-muted mb-3"></i>
+        <h4>No ambulances</h4>
+        <p class="text-muted">Register ambulances for emergency response.</p>
+        <a href="{% url 'add_ambulance' %}" class="btn btn-primary mt-3">Add First Ambulance</a>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

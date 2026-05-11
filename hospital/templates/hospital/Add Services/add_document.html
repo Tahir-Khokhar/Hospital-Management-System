@@ -1,0 +1,75 @@
+{% extends "hospital/base.html" %}
+{% block title %}Upload Document - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="form-container">
+    <h1><i class="fas fa-upload"></i> Upload Document</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Patient (Optional)</label>
+            <select name="patient" class="form-control">
+                <option value="">General Document</option>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}">{{ patient.get_full_name|default:patient }} ({{ patient.id }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Document Category <span class="text-danger">*</span></label>
+            <select name="document_type" class="form-control" required>
+                <option value="">Select Category</option>
+                <option value="report">🩺 Medical Report (MRI, CT, X-Ray)</option>
+                <option value="prescription">💊 Prescription / RX</option>
+                <option value="lab_result">🧪 Lab Results (Blood, Urine)</option>
+                <option value="insurance">🛡️ Insurance Documents</option>
+                <option value="id_proof">🆔 ID Proof (Aadhar, License)</option>
+                <option value="discharge">🏥 Discharge Summary</option>
+                <option value="consent">📝 Consent Forms</option>
+                <option value="other">📄 Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Title / Filename <span class="text-danger">*</span></label>
+            <input type="text" name="title" class="form-control" placeholder="John Doe - MRI Report 2024-01-15.pdf" required>
+        </div>
+
+        <div class="form-group">
+            <label>File <span class="text-danger">*</span> (PDF, JPG, PNG up to 10MB)</label>
+            <input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+            <small class="text-muted">Max 10MB. Securely stored and encrypted.</small>
+        </div>
+
+        <div class="form-group">
+            <label>Description / Tags (Optional)</label>
+            <textarea name="description" class="form-control" rows="3" placeholder="MRI of lumbar spine, no contrast. L4-L5 disc prolapse. Follow-up in 2 weeks. Dr. Smith. #MRI #spine #disc"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Tags (comma separated)</label>
+            <input type="text" name="tags" class="form-control" placeholder="MRI, spine, l4-l5, dr-smith, 2024">
+        </div>
+
+        <div class="form-actions" style="text-align: right; margin-top: 2rem;">
+            <a href="{% url 'document_list' %}" class="btn btn-secondary mr-2">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-upload"></i> Upload Securely
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}

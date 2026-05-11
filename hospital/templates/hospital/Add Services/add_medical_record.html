@@ -1,0 +1,89 @@
+{% extends "hospital/base.html" %}
+{% block title %}Add Medical Record - Hospital Management{% endblock %}
+
+<div class="form-container">
+    <h1><i class="fas fa-file-medical-alt"></i> Add Medical Record</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Patient <span class="text-danger">*</span></label>
+            <select name="patient" class="form-control" required>
+                <option value="">Select Patient</option>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}">{{ patient.get_full_name|default:patient }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Doctor <span class="text-danger">*</span></label>
+            <select name="doctor" class="form-control" required>
+                <option value="">Select Doctor</option>
+                {% for doctor in doctors %}
+                <option value="{{ doctor.id }}">Dr. {{ doctor.get_full_name|default:doctor }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Record Type <span class="text-danger">*</span></label>
+            <select name="record_type" class="form-control" required>
+                <option value="">Select Type</option>
+                <option value="diagnosis">Diagnosis</option>
+                <option value="consultation">Consultation</option>
+                <option value="followup">Follow-up</option>
+                <option value="emergency">Emergency</option>
+                <option value="routine">Routine Checkup</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Diagnosis <span class="text-danger">*</span></label>
+            <input type="text" name="diagnosis" class="form-control" required placeholder="e.g., Hypertension, Influenza...">
+        </div>
+
+        <div class="form-group">
+            <label>Symptoms</label>
+            <textarea name="symptoms" class="form-control" rows="3" placeholder="Patient symptoms and complaints..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Findings / Test Results</label>
+            <textarea name="findings" class="form-control" rows="3" placeholder="Clinical findings, lab results..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Treatment Notes</label>
+            <textarea name="notes" class="form-control" rows="3" placeholder="Prescribed treatment, medications, instructions..."></textarea>
+        </div>
+
+        <div class="form-group-inline">
+            <div class="form-group">
+                <label>Record Date</label>
+                <input type="date" name="record_date" class="form-control" value="{{ today|date:'Y-m-d' }}" required>
+            </div>
+            <div class="form-group">
+                <label>Follow-up Date</label>
+                <input type="date" name="follow_up_date" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-actions" style="text-align: right; margin-top: 2rem;">
+            <a href="{% url 'medical_record_list' %}" class="btn btn-secondary mr-2">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Record
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

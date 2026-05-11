@@ -1,0 +1,37 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Appointments - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Appointments</h1>
+    <a href="{% url 'add_appointment' %}" class="btn btn-primary">Schedule Appointment</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+        <tr>
+            <td>{{ appointment.patient }}</td>
+            <td>{{ appointment.doctor }}</td>
+            <td>{{ appointment.date }}</td>
+            <td>{{ appointment.time }}</td>
+            <td><span class="badge badge-{{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No appointments found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

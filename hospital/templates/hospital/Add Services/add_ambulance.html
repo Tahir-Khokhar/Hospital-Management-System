@@ -1,0 +1,95 @@
+{% extends "hospital/base.html" %}
+{% block title %}Add Ambulance - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="form-container">
+    <h1><i class="fas fa-ambulance"></i> Add Ambulance</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Vehicle Number <span class="text-danger">*</span></label>
+            <input type="text" name="vehicle_number" class="form-control" placeholder="AMB-001, MH-12-AB-1234" maxlength="20" required>
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Driver Name <span class="text-danger">*</span></label>
+                <input type="text" name="driver_name" class="form-control" placeholder="John Doe" required>
+            </div>
+            <div>
+                <label>License #</label>
+                <input type="text" name="driver_license" class="form-control" placeholder="MH123456789012">
+            </div>
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Driver Phone <span class="text-danger">*</span></label>
+                <input type="tel" name="driver_phone" class="form-control" placeholder="+91 98765 43210" required>
+            </div>
+            <div>
+                <label>Emergency Contact</label>
+                <input type="tel" name="emergency_contact" class="form-control" placeholder="Supervisor phone">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Current Location</label>
+            <input type="text" name="current_location" class="form-control" placeholder="Hospital Parking Lot A, City Hospital Main Gate">
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Vehicle Type</label>
+                <select name="vehicle_type" class="form-control">
+                    <option value="basic">Basic Life Support</option>
+                    <option value="advanced">Advanced Life Support</option>
+                    <option value="critical">Critical Care</option>
+                    <option value="neonatal">Neonatal</option>
+                </select>
+            </div>
+            <div>
+                <label>Capacity</label>
+                <input type="number" name="capacity" class="form-control" min="1" max="6" value="2">
+                <small>patients</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Status <span class="text-danger">*</span></label>
+            <select name="status" class="form-control" required>
+                <option value="">Select Status</option>
+                <option value="available">Available</option>
+                <option value="dispatched">Dispatched</option>
+                <option value="returning">Returning</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="out_of_service">Out of Service</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Equipment Notes</label>
+            <textarea name="equipment_notes" class="form-control" rows="2" placeholder="Defibrillator: Ready, Oxygen: Full, Drugs: Checked"></textarea>
+        </div>
+
+        <div class="form-actions" style="text-align: right; margin-top: 2rem;">
+            <a href="{% url 'ambulance_list' %}" class="btn btn-secondary mr-2">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Register Ambulance
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}

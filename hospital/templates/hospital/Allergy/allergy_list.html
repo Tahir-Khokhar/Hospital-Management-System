@@ -1,0 +1,76 @@
+{% extends "hospital/base.html" %}
+{% block title %}Allergies - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="list-container">
+    <div class="list-header">
+        <h1><i class="fas fa-allergies"></i> Patient Allergies</h1>
+        <a href="{% url 'add_allergy' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Allergy
+        </a>
+    </div>
+
+    <div class="search-bar">
+        <form method="get" class="search-form">
+            <input type="text" name="q" class="form-control" placeholder="Search by patient, allergen, reactions...">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+
+    {% if allergies %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Allergen</th>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Reactions</th>
+                <th>Discovered</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for allergy in allergies %}
+            <tr>
+{{ allergy.patient.first_name }} {{ allergy.patient.last_name|default:"N/A" }}
+
+                <td><strong>{{ allergy.allergen|title }}</strong></td>
+                <td>{{ allergy.get_allergy_type_display|default:allergy.allergy_type|title }}</td>
+                <td>
+                    {% if allergy.severity == 'severe' or allergy.severity == 'life_threatening' %}
+                    <span class="badge badge-danger">{{ allergy.get_severity_display|title }}</span>
+                    {% elif allergy.severity == 'moderate' %}
+                    <span class="badge badge-warning">{{ allergy.get_severity_display|title }}</span>
+                    {% else %}
+                    <span class="badge badge-info">{{ allergy.get_severity_display|title }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ allergy.reactions|truncatechars:40 }}</td>
+                <td>{{ allergy.discovered_date|date:"M d, Y" }}</td>
+                <td>
+                    {% if allergy.is_active %}
+                    <span class="badge badge-success">Active</span>
+                    {% else %}
+                    <span class="badge badge-secondary">Archived</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'allergy_detail' allergy.pk %}" class="btn btn-sm btn-info" title="View"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'edit_allergy' allergy.pk %}" class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-row text-center py-5">
+        <i class="fas fa-allergies fa-3x text-muted mb-3"></i>
+        <h4>No allergy records</h4>
+        <p class="text-muted">Add allergies to keep patients safe.</p>
+        <a href="{% url 'add_allergy' %}" class="btn btn-primary mt-3">Record First Allergy</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

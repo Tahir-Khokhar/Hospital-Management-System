@@ -1,0 +1,86 @@
+{% extends "hospital/base.html" %}
+{% block title %}{% if prescription %}Edit{% else %}Add{% endif %} Prescription - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="form-container">
+    <h1>{% if prescription %}Edit{% else %}New{% endif %} Prescription</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Patient <span class="text-danger">*</span></label>
+            <select name="patient" class="form-control" required>
+                <option value="">Select Patient</option>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}" {% if prescription and prescription.patient == patient %}selected{% endif %}>
+                    {{ patient.get_full_name|default:patient }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Doctor <span class="text-danger">*</span></label>
+            <select name="doctor" class="form-control" required>
+                <option value="">Select Doctor</option>
+                {% for doctor in doctors %}
+                <option value="{{ doctor.id }}" {% if prescription and prescription.doctor == doctor %}selected{% endif %}>
+                    Dr. {{ doctor.first_name }} {{ doctor.last_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Medicine <span class="text-danger">*</span></label>
+            <input type="text" name="medicine_name" class="form-control" value="{{ prescription.medicine_name|default:'' }}" placeholder="e.g., Paracetamol 500mg" required>
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Dosage <span class="text-danger">*</span></label>
+                <input type="text" name="dosage" class="form-control" value="{{ prescription.dosage|default:'' }}" placeholder="500mg, 1 tab" required>
+            </div>
+            <div>
+                <label>Frequency <span class="text-danger">*</span></label>
+                <input type="text" name="frequency" class="form-control" value="{{ prescription.frequency|default:'' }}" placeholder="TID, daily" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Duration <span class="text-danger">*</span></label>
+            <input type="text" name="duration" class="form-control" value="{{ prescription.duration|default:'' }}" placeholder="7 days" required>
+        </div>
+
+        <div class="form-group">
+            <label>Instructions</label>
+            <textarea name="instructions" class="form-control" rows="3">{{ prescription.instructions|default:'' }}</textarea>
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Start Date <span class="text-danger">*</span></label>
+                <input type="date" name="start_date" class="form-control" value="{{ prescription.start_date|date:'Y-m-d'|default:today|date:'Y-m-d' }}" required>
+            </div>
+        </div>
+
+        <div class="form-actions mt-4">
+            <a href="{% url 'prescription_list' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> {% if prescription %}Update{% else %}Save{% endif %} Prescription
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}

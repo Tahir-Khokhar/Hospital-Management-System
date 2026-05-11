@@ -1,0 +1,93 @@
+{% extends "hospital/base.html" %}
+{% block title %}Add Prescription - Hospital Management{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="form-container">
+    <h1><i class="fas fa-prescription-bottle-alt"></i> New Prescription</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Patient <span class="text-danger">*</span></label>
+            <select name="patient" class="form-control" required>
+                <option value="">Select Patient</option>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}">{{ patient.get_full_name|default:patient }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Prescribing Doctor <span class="text-danger">*</span></label>
+            <select name="doctor" class="form-control" required>
+                <option value="">Select Doctor</option>
+                {% for doctor in doctors %}
+                <option value="{{ doctor.id }}">Dr. {{ doctor.get_full_name|default:doctor }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Medicine Name <span class="text-danger">*</span></label>
+            <input type="text" name="medicine_name" class="form-control" placeholder="e.g., Paracetamol 500mg, Amoxicillin 250mg" required>
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Dosage <span class="text-danger">*</span></label>
+                <input type="text" name="dosage" class="form-control" placeholder="500mg, 1 tab, 10ml" required>
+            </div>
+
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Frequency <span class="text-danger">*</span></label>
+                <input type="text" name="frequency" class="form-control" placeholder="TID, q6h, once daily, bedtime" required>
+            </div>
+            <div>
+                <label>Duration <span class="text-danger">*</span></label>
+                <input type="text" name="duration" class="form-control" placeholder="7 days, 10 doses, until finished" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Instructions to Patient</label>
+            <textarea name="instructions" class="form-control" rows="3" placeholder="Take with food. Avoid alcohol. Call if rash develops. Complete full course."></textarea>
+        </div>
+
+        <div class="form-group-inline">
+            <div>
+                <label>Start Date <span class="text-danger">*</span></label>
+                <input type="date" name="start_date" class="form-control" value="{{ today|date:'Y-m-d' }}" required>
+            </div>
+            <div>
+                <label>Refill Date</label>
+                <input type="date" name="end_date" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group">
+
+        </div>
+
+        <div class="form-actions" style="text-align: right; margin-top: 2rem;">
+            <a href="{% url 'prescription_list' %}" class="btn btn-secondary mr-2">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-save"></i> Issue Prescription
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}
