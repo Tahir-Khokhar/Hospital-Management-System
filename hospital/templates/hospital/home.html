@@ -72,7 +72,7 @@ body.layout-guest .guest-navbar {
                 <div class="dropdown">
                     <button type="button" class="btn btn-admin dropdown-toggle"><i class="fas fa-user-shield"></i> Admin Portal <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-menu">
-                        <a href="{% url 'login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt"></i> Admin Login</a>
+                        <a href="admin/" class="dropdown-item"><i class="fas fa-sign-in-alt"></i> Admin Login</a>
                     </div>
                 </div>
             </div>
@@ -162,41 +162,204 @@ body.layout-guest .guest-navbar {
 
         <hr class="section-divider">
 
-        <div class="charts-section-dashboard">
-            <div class="section-header"><h2><i class="fas fa-chart-pie"></i> Analytics &amp; Performance</h2><span class="section-subtitle">Monthly revenue &amp; appointment status</span></div>
-            <div class="charts-row">
-                <div class="chart-card"><div class="chart-header"><h3><i class="fas fa-chart-line"></i> Monthly Revenue</h3></div><div class="chart-body"><canvas id="revenueChart" width="400" height="200"></canvas></div></div>
-                <div class="chart-card"><div class="chart-header"><h3><i class="fas fa-chart-pie"></i> Appointment Status</h3></div><div class="chart-body"><canvas id="appointmentChart" width="400" height="200"></canvas></div></div>
-            </div>
-        </div>
+        {% if home_mode == 'patient' %}
+            <hr class="section-divider">
+            <div class="activity-section-dashboard">
+                <div class="section-header"><h2><i class="fas fa-user-injured"></i> My Portal</h2><span class="section-subtitle">Your recent medical activity</span></div>
+                <div class="portal-grid" style="margin-top:1rem;">
+                    <div class="portal-card">
+                        <h3><i class="fas fa-calendar-check"></i> My Appointments</h3>
+                        {% for appt in my_appointments %}
+                            <div class="portal-item">
+                                <p><strong>Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}</strong></p>
+                                <p>{{ appt.date }} at {{ appt.time }}</p>
+                                <span class="badge badge-{{ appt.status|lower }}">{{ appt.status }}</span>
+                            </div>
+                        {% empty %}
+                            <p>No appointments.</p>
+                        {% endfor %}
+                    </div>
 
-        <hr class="section-divider">
+                    <div class="portal-card">
+                        <h3><i class="fas fa-file-medical-alt"></i> My Records</h3>
+                        {% for r in my_records %}
+                            <div class="portal-item">
+                                <p><strong>{{ r.get_record_type_display }}</strong></p>
+                                <p>Date: {{ r.record_date }}</p>
+                                <p>Diagnosis: {{ r.diagnosis|truncatewords:10 }}</p>
+                            </div>
+                        {% empty %}
+                            <p>No records.</p>
+                        {% endfor %}
+                    </div>
 
-        <div class="activity-section-dashboard">
-            <div class="section-header"><h2><i class="fas fa-history"></i> Recent Appointments</h2><span class="section-subtitle">Latest scheduled visits</span></div>
-            <div class="activity-card">
-                <div class="activity-table-wrap">
-                    <table class="activity-table">
-                        <thead><tr><th><i class="fas fa-user"></i> Patient</th><th><i class="fas fa-user-md"></i> Doctor</th><th><i class="far fa-calendar"></i> Date</th><th><i class="fas fa-info-circle"></i> Status</th></tr></thead>
-                        <tbody>
-                            {% for appt in recent_appointments %}
-                            <tr>
-                                <td><span class="patient-name">{{ appt.patient.first_name }} {{ appt.patient.last_name }}</span></td>
-                                <td><span class="doctor-name">Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}</span></td>
-                                <td>{{ appt.date }}</td>
-                                <td><span class="status-badge status-{{ appt.status|lower }}">{{ appt.get_status_display }}</span></td>
-                            </tr>
-                            {% empty %}
-                            <tr><td colspan="4" style="text-align:center;padding:1.5rem;">No appointments yet.</td></tr>
+                    <div class="portal-card">
+                        <h3><i class="fas fa-pills"></i> My Treatments</h3>
+                        {% for t in my_treatments %}
+                            <div class="portal-item">
+                                <p><strong>{{ t.treatment_name }}</strong></p>
+                                <p>Doctor: Dr. {{ t.doctor.first_name }} {{ t.doctor.last_name }}</p>
+                                <p>Start: {{ t.start_date }}{% if t.end_date %} to {{ t.end_date }}{% endif %}</p>
+                            </div>
+                        {% empty %}
+                            <p>No treatments.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="portal-card">
+                        <h3><i class="fas fa-vial"></i> My Lab Tests</h3>
+                        {% for test in my_lab_tests %}
+                            <div class="portal-item">
+                                <p><strong>{{ test.get_test_type_display }}</strong></p>
+                                <p>Status: <span class="badge badge-{{ test.status }}">{{ test.get_status_display }}</span></p>
+                                {% if test.result %}<p>Result: {{ test.result|truncatewords:10 }}</p>{% endif %}
+                            </div>
+                        {% empty %}
+                            <p>No lab tests.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="portal-card">
+                        <h3><i class="fas fa-file-invoice-dollar"></i> My Bills</h3>
+                        {% for inv in my_invoices %}
+                            <div class="portal-item">
+                                <p><strong>Invoice #{{ inv.invoice_number }}</strong></p>
+                                <p>Amount: {{ inv.total_amount }}</p>
+                                <span class="badge badge-{{ inv.status }}">{{ inv.get_status_display }}</span>
+                            </div>
+                        {% empty %}
+                            <p>No invoices.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="portal-card">
+                        <h3><i class="fas fa-bell"></i> My Notifications</h3>
+                        {% if notifications %}
+                            {% for n in notifications %}
+                                <div class="portal-item">
+                                    <p><strong>{{ n.subject }}</strong></p>
+                                    <p>{{ n.message|truncatewords:15 }}</p>
+                                </div>
                             {% endfor %}
-                        </tbody>
-                    </table>
+                        {% else %}
+                            <p>No unread notifications.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
+
+        {% elif home_mode == 'doctor' %}
+            <hr class="section-divider">
+            <div class="activity-section-dashboard">
+                <div class="section-header"><h2><i class="fas fa-user-md"></i> Doctor Home</h2><span class="section-subtitle">Today & upcoming + recent operations</span></div>
+
+                <div class="portal-grid" style="margin-top:1rem;">
+                    <div class="portal-card">
+                        <h3><i class="fas fa-calendar-day"></i> Today Appointments</h3>
+                        {% for appt in today_appointments %}
+                            <div class="portal-item">
+                                <p><strong>{{ appt.patient.first_name }} {{ appt.patient.last_name }}</strong></p>
+                                <p>Time: {{ appt.time }}</p>
+                                <span class="badge badge-{{ appt.status|lower }}">{{ appt.status }}</span>
+                            </div>
+                        {% empty %}
+                            <p>No appointments today.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="portal-card">
+                        <h3><i class="fas fa-calendar-week"></i> Upcoming Appointments</h3>
+                        {% for appt in upcoming_appointments %}
+                            <div class="portal-item">
+                                <p><strong>{{ appt.patient.first_name }} {{ appt.patient.last_name }}</strong></p>
+                                <p>{{ appt.date }} at {{ appt.time }}</p>
+                            </div>
+                        {% empty %}
+                            <p>No upcoming appointments.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="portal-card">
+                        <h3><i class="fas fa-procedures"></i> Recent Operations</h3>
+                        {% for op in recent_operations %}
+                            <div class="portal-item">
+                                <p><strong>{{ op.operation_name }}</strong></p>
+                                <p>Patient: {{ op.patient.first_name }} {{ op.patient.last_name }}</p>
+                                <p>Date: {{ op.scheduled_date }}</p>
+                                <span class="badge badge-{{ op.status }}">{{ op.get_status_display }}</span>
+                            </div>
+                        {% empty %}
+                            <p>No recent operations.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="portal-card">
+                        <h3><i class="fas fa-pills"></i> Recent Treatments</h3>
+                        {% for t in recent_treatments %}
+                            <div class="portal-item">
+                                <p><strong>{{ t.treatment_name }}</strong></p>
+                                <p>Patient: {{ t.patient.first_name }} {{ t.patient.last_name }}</p>
+                                <p>Start: {{ t.start_date }}{% if t.end_date %} to {{ t.end_date }}{% endif %}</p>
+                            </div>
+                        {% empty %}
+                            <p>No recent treatments.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="portal-card">
+                        <h3><i class="fas fa-bell"></i> My Notifications</h3>
+                        {% if notifications %}
+                            {% for n in notifications %}
+                                <div class="portal-item">
+                                    <p><strong>{{ n.subject }}</strong></p>
+                                    <p>{{ n.message|truncatewords:15 }}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No unread notifications.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="charts-section-dashboard">
+                <div class="section-header"><h2><i class="fas fa-chart-pie"></i> Analytics &amp; Performance</h2><span class="section-subtitle">Monthly revenue &amp; appointment status</span></div>
+                <div class="charts-row">
+                    <div class="chart-card"><div class="chart-header"><h3><i class="fas fa-chart-line"></i> Monthly Revenue</h3></div><div class="chart-body"><canvas id="revenueChart" width="400" height="200"></canvas></div></div>
+                    <div class="chart-card"><div class="chart-header"><h3><i class="fas fa-chart-pie"></i> Appointment Status</h3></div><div class="chart-body"><canvas id="appointmentChart" width="400" height="200"></canvas></div></div>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <div class="activity-section-dashboard">
+                <div class="section-header"><h2><i class="fas fa-history"></i> Recent Appointments</h2><span class="section-subtitle">Latest scheduled visits</span></div>
+                <div class="activity-card">
+                    <div class="activity-table-wrap">
+                        <table class="activity-table">
+                            <thead><tr><th><i class="fas fa-user"></i> Patient</th><th><i class="fas fa-user-md"></i> Doctor</th><th><i class="far fa-calendar"></i> Date</th><th><i class="fas fa-info-circle"></i> Status</th></tr></thead>
+                            <tbody>
+                                {% for appt in recent_appointments %}
+                                <tr>
+                                    <td><span class="patient-name">{{ appt.patient.first_name }} {{ appt.patient.last_name }}</span></td>
+                                    <td><span class="doctor-name">Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}</span></td>
+                                    <td>{{ appt.date }}</td>
+                                    <td><span class="status-badge status-{{ appt.status|lower }}">{{ appt.get_status_display }}</span></td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" style="text-align:center;padding:1.5rem;">No appointments yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
     <section class="guest-info">
+
         <h2 class="section-title"><i class="fas fa-star"></i> Why Choose Us</h2>
         <div class="info-grid">
             <div class="info-card"><i class="fas fa-shield-alt fa-2x"></i><h3>Secure &amp; Reliable</h3><p>Structured patient data management</p></div>
